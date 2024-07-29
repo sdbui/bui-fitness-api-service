@@ -9,13 +9,12 @@ use Illuminate\Support\Facades\Schema;
 /*TODO: need to re-crawl and update exercises with:
     - exercise summary
     - exercise directions
-    - exercise thumbnail (this is actually for getExercises)
 */
 
 class ExerciseController extends Controller
 {
     public function getExercises(Request $req) {
-        $cols =  ['name','target_muscle_group','exercise_type', 'equipment_required','experience_level', 'url'];
+        $cols =  ['name','category','exercise_type', 'equipment_required','experience_level', 'url'];
         $params = $this->getQueryParams($req);
         $query = Exercise::query();
         $schema = Schema::getColumnListing('exercises');
@@ -32,9 +31,20 @@ class ExerciseController extends Controller
             }
         }
         error_log(print_r($query->toSql(),true));
+        
+        // $test = $query->with(['secondary_muscles' => function ($query) {
+        //     $query->withPivot('name');
+        // }]);
+        // $t = json_encode($test->first());
+        // error_log(print_r($t, true));
 
+        // $first = $query->with('secondary_muscles')->first();
+        // $json = json_encode($first);
+        // error_log(print_r($json, true));
+        // return $query->with('secondary_muscles')->first();
+        $query = $query->with('secondary_muscles');
+        return $query->paginate(15);
         // return $query->paginate(15, $cols);
-        return $query->paginate(15, $cols);
     }
 
     public function getExercise(string $id) {

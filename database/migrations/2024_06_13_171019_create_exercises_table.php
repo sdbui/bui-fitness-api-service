@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Better
+        Schema::dropIfExists('exercises');
         Schema::create('exercises', function (Blueprint $table) {
             $table->id();
             $table->string('category');
