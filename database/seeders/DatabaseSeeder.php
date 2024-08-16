@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(MuscleTableSeeder::class);
         $this->call(ExerciseTableSeeder::class);
+        $this->call(ThumbnailSeeder::class);
 
     }
 }

@@ -35,12 +35,12 @@ class ExerciseTableSeeder extends Seeder
             // also attach the secondary_muscles
             if ($exercise['secondary_muscles'][0] != 'none') {
                 foreach($exercise['secondary_muscles'] as $muscle_name) {
-                    error_log(print_r('othertest: '.$muscle_name, true));
+                    // error_log(print_r('othertest: '.$muscle_name, true));
                     $mid = Muscle::select('id') ->where('name', $muscle_name)->first();
                     if (is_null($mid)) {
                         continue;
                     }
-                    error_log(print_r('test: '.$mid['id'],true));
+                    // error_log(print_r('test: '.$mid['id'],true));
                     $muscleid = $mid['id'];
                     $exercise_entry->secondary_muscles()->attach($muscleid);
                 }
