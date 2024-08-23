@@ -1,5 +1,6 @@
 # Use PHP with Apache as the base image
 FROM php:8.2-apache as web
+# FROM arm64v8/php:8.2-apache as web
 
 # Install Additional System Dependencies
 RUN apt-get update && apt-get install -y \
@@ -10,7 +11,14 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache mod_rewrite for URL rewriting
-RUN a2enmod rewrite
+RUN a2enmod ssl && a2enmod rewrite
+RUN mkdir -p /etc/apache2/ssl
+
+# Copy over certificate and modified apache config
+# do this here or manually enter container afterwards and generate???
+COPY ./certs/cert-key.pem /etc/apache2/ssl/
+COPY ./certs/cert.pem /etc/apache2/ssl/
+COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql zip
